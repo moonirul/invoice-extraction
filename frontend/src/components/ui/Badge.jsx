@@ -1,18 +1,19 @@
 import clsx from 'clsx'
 
 const tones = {
-  success: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
-  danger: 'bg-red-50 text-red-700 ring-red-600/20',
-  warning: 'bg-amber-50 text-amber-800 ring-amber-600/20',
-  info: 'bg-brand-50 text-brand-700 ring-brand-600/20',
-  neutral: 'bg-slate-100 text-slate-600 ring-slate-500/20',
+  success: 'bg-emerald-500/15 text-emerald-400 ring-emerald-500/30',
+  danger:  'bg-red-500/15    text-red-400    ring-red-500/30',
+  warning: 'bg-amber-500/15  text-amber-400  ring-amber-500/30',
+  info:    'bg-brand-500/15  text-brand-400  ring-brand-500/30',
+  neutral: 'bg-dark-600      text-slate-400  ring-dark-500',
 }
+
 const dots = {
-  success: 'bg-emerald-500',
-  danger: 'bg-red-500',
-  warning: 'bg-amber-500',
-  info: 'bg-brand-500',
-  neutral: 'bg-slate-400',
+  success: 'bg-emerald-400',
+  danger:  'bg-red-400',
+  warning: 'bg-amber-400',
+  info:    'bg-brand-400',
+  neutral: 'bg-dark-300',
 }
 
 export function Badge({ tone = 'neutral', dot = true, className, children, ...props }) {
@@ -25,7 +26,7 @@ export function Badge({ tone = 'neutral', dot = true, className, children, ...pr
       )}
       {...props}
     >
-      {dot && <span className={clsx('size-1.5 rounded-full', dots[tone])} aria-hidden />}
+      {dot && <span className={clsx('size-1.5 rounded-full shrink-0', dots[tone])} aria-hidden />}
       {children}
     </span>
   )

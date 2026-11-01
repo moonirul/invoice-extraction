@@ -2,7 +2,6 @@ import clsx from 'clsx'
 import { FileText, Sparkles, UploadCloud, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { env } from '@/config/env'
 import { formatBytes } from '@/lib/format'
 
@@ -34,37 +33,83 @@ export function UploadCard({ file, onFileChange, onExtract, extracting }) {
   }
 
   return (
-    <Card>
-      <CardHeader
-        icon={UploadCloud}
-        title="Upload invoice"
-        description="Drop a PDF invoice and our AI will extract the details for your review."
+    <div className="relative overflow-hidden rounded-xl border border-dark-700 bg-dark-800">
+      {/* Gradient top accent */}
+      <div className="h-px w-full bg-gradient-brand opacity-60" />
+
+      {/* Glow blob decoration */}
+      <div
+        className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-brand-600/10 blur-3xl"
+        aria-hidden
       />
-      <CardBody className="space-y-4">
+
+      <div className="relative p-6">
+        {/* Header */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-purple shadow-lg">
+              <UploadCloud className="size-5 text-white" aria-hidden />
+            </span>
+            <div>
+              <h2 className="text-sm font-semibold text-slate-100">Upload Invoice</h2>
+              <p className="text-xs text-dark-300">AI-powered extraction · PDF only</p>
+            </div>
+          </div>
+          <span className="flex items-center gap-1.5 rounded-full border border-brand-500/30 bg-brand-500/10 px-2.5 py-1 text-[11px] font-semibold text-brand-400">
+            <Sparkles className="size-3" />
+            AI Ready
+          </span>
+        </div>
+
+        {/* Drop zone */}
         <div
           onDragOver={(e) => { e.preventDefault(); setDragging(true) }}
           onDragLeave={() => setDragging(false)}
           onDrop={onDrop}
+          onClick={() => !extracting && inputRef.current?.click()}
+          onKeyDown={(e) => e.key === 'Enter' && !extracting && inputRef.current?.click()}
+          role="button"
+          tabIndex={0}
+          aria-label="Click or drag to upload a PDF invoice"
           className={clsx(
-            'relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-6 py-10 text-center transition',
-            dragging ? 'border-brand-500 bg-brand-50' : 'border-slate-300 bg-slate-50/60 hover:border-slate-400',
-            extracting && 'pointer-events-none opacity-60',
+            'relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-8 py-14 text-center transition-all duration-200 cursor-pointer',
+            dragging
+              ? 'border-brand-500 bg-brand-500/10 scale-[1.01]'
+              : 'border-dark-600 hover:border-brand-500/50 hover:bg-brand-500/5',
+            extracting && 'pointer-events-none opacity-50',
           )}
         >
-          <span className="flex size-12 items-center justify-center rounded-full bg-white text-brand-600 shadow-card ring-1 ring-slate-200">
-            <UploadCloud className="size-6" aria-hidden />
-          </span>
-          <p className="mt-3 text-sm font-medium text-slate-900">
-            Drag &amp; drop your PDF here, or{' '}
-            <button
-              type="button"
-              onClick={() => inputRef.current?.click()}
-              className="rounded text-brand-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
-            >
-              browse files
-            </button>
+          {/* Icon */}
+          <div className={clsx(
+            'mb-5 flex size-20 items-center justify-center rounded-2xl transition-all duration-200',
+            dragging
+              ? 'bg-gradient-brand shadow-lg shadow-brand-500/30'
+              : 'border border-dark-600 bg-dark-700',
+          )}>
+            <UploadCloud className={clsx('size-9 transition-colors', dragging ? 'text-white' : 'text-brand-400')} aria-hidden />
+          </div>
+
+          <p className="text-base font-semibold text-slate-200">
+            {dragging ? 'Drop your PDF here' : 'Drag & drop your invoice'}
           </p>
-          <p className="mt-1 text-xs text-slate-500">PDF only · up to {env.maxUploadMb} MB</p>
+          <p className="mt-1.5 text-sm text-dark-300">
+            or{' '}
+            <span className="font-semibold text-brand-400 underline underline-offset-2 hover:text-brand-300 transition-colors">
+              click to browse
+            </span>
+            {' '}· up to {env.maxUploadMb} MB
+          </p>
+
+          {/* Gradient corner decorations when dragging */}
+          {dragging && (
+            <>
+              <div className="pointer-events-none absolute left-2 top-2 size-6 rounded-tl-lg border-l-2 border-t-2 border-brand-400" />
+              <div className="pointer-events-none absolute right-2 top-2 size-6 rounded-tr-lg border-r-2 border-t-2 border-brand-400" />
+              <div className="pointer-events-none absolute bottom-2 left-2 size-6 rounded-bl-lg border-b-2 border-l-2 border-brand-400" />
+              <div className="pointer-events-none absolute bottom-2 right-2 size-6 rounded-br-lg border-b-2 border-r-2 border-brand-400" />
+            </>
+          )}
+
           <input
             ref={inputRef}
             type="file"
@@ -75,33 +120,48 @@ export function UploadCard({ file, onFileChange, onExtract, extracting }) {
           />
         </div>
 
-        {fileError && <p role="alert" className="text-sm text-red-600">{fileError}</p>}
+        {/* File error */}
+        {fileError && (
+          <p role="alert" className="mt-3 flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2 text-sm text-red-400">
+            <span className="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-[10px] font-bold">!</span>
+            {fileError}
+          </p>
+        )}
 
+        {/* Selected file chip */}
         {file && (
-          <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5">
-            <FileText className="size-5 shrink-0 text-brand-600" aria-hidden />
+          <div className="mt-4 flex items-center gap-3 rounded-xl border border-dark-600 bg-dark-700 px-4 py-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-500/20">
+              <FileText className="size-5 text-brand-400" aria-hidden />
+            </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-slate-900">{file.name}</p>
-              <p className="text-xs text-slate-500">{formatBytes(file.size)}</p>
+              <p className="truncate text-sm font-medium text-slate-100">{file.name}</p>
+              <p className="text-xs text-dark-300">{formatBytes(file.size)} · Ready for extraction</p>
             </div>
             <button
               type="button"
-              onClick={() => choose(null)}
+              onClick={(e) => { e.stopPropagation(); choose(null) }}
               disabled={extracting}
               aria-label="Remove file"
-              className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 disabled:opacity-50"
+              className="rounded-lg p-1.5 text-dark-300 transition hover:bg-red-500/20 hover:text-red-400 disabled:opacity-40"
             >
               <X className="size-4" />
             </button>
           </div>
         )}
 
-        <div className="flex justify-end">
-          <Button icon={Sparkles} loading={extracting} disabled={!file} onClick={onExtract}>
-            {extracting ? 'Extracting with AI…' : 'Extract invoice'}
+        {/* CTA row */}
+        <div className="mt-5 flex items-center justify-between gap-4">
+          <p className="text-xs text-dark-300">
+            {extracting
+              ? '⚡ AI is reading your invoice…'
+              : 'Supports multi-page, scanned PDFs'}
+          </p>
+          <Button icon={Sparkles} loading={extracting} disabled={!file} onClick={onExtract} size="lg">
+            {extracting ? 'Extracting…' : 'Extract with AI'}
           </Button>
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }

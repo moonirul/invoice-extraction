@@ -1,37 +1,95 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
 
-/* Design tokens: change the brand scale here to re-theme the whole app. */
 @theme {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
+  /* ── Brand colors ── */
+  --color-brand-50:  #f5f3ff;
+  --color-brand-100: #ede9fe;
+  --color-brand-200: #ddd6fe;
+  --color-brand-400: #a78bfa;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6d28d9;
+  --color-brand-800: #5b21b6;
 
-  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06);
-  --shadow-pop: 0 10px 30px -10px rgb(15 23 42 / 0.18);
+  /* ── Dark surface palette ── */
+  --color-dark-950: #030712;
+  --color-dark-900: #0f1117;
+  --color-dark-800: #161b27;
+  --color-dark-700: #1e2537;
+  --color-dark-600: #252d42;
+  --color-dark-500: #2e3a52;
+  --color-dark-400: #3d4d68;
+  --color-dark-300: #536080;
+
+  /* ── Shadows ── */
+  --shadow-card:   0 1px 3px rgb(0 0 0 / 0.4), 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-glow:   0 0 0 1px rgb(139 92 246 / 0.4), 0 0 20px rgb(139 92 246 / 0.15);
+  --shadow-pop:    0 20px 50px -10px rgb(0 0 0 / 0.6);
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
   }
   body {
-    @apply bg-slate-50 font-sans text-slate-900 antialiased;
+    @apply bg-dark-900 font-sans text-slate-200 antialiased;
+    background-image:
+      radial-gradient(ellipse at 10% 0%, rgb(124 58 237 / 0.08) 0px, transparent 55%),
+      radial-gradient(ellipse at 90% 0%, rgb(37 99 235 / 0.06) 0px, transparent 55%);
+    background-attachment: fixed;
   }
   ::selection {
-    @apply bg-brand-100;
+    @apply bg-brand-700 text-white;
+  }
+  ::-webkit-scrollbar         { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track   { background: transparent; }
+  ::-webkit-scrollbar-thumb   { @apply rounded-full bg-dark-500; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-dark-400; }
+}
+
+@layer utilities {
+  /* Gradient backgrounds */
+  .bg-gradient-purple  { background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); }
+  .bg-gradient-blue    { background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%); }
+  .bg-gradient-green   { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+  .bg-gradient-orange  { background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%); }
+  .bg-gradient-pink    { background: linear-gradient(135deg, #db2777 0%, #9333ea 100%); }
+  .bg-gradient-brand   { background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%); }
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass card */
+  .glass {
+    background: rgb(22 27 39 / 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  /* Glow border on focus */
+  .glow-border {
+    box-shadow: var(--shadow-glow);
   }
 }
 
+/* Sidebar nav active state */
+.nav-active {
+  background: linear-gradient(90deg, rgb(124 58 237 / 0.25) 0%, rgb(124 58 237 / 0.05) 100%);
+  border-left: 3px solid #7c3aed;
+  color: #a78bfa;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
