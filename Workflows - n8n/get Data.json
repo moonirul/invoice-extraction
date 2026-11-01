@@ -1,0 +1,107 @@
+{
+  "name": "get Data",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "521c420a-9d59-4b99-a979-531e5bcfa4bb",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "86ee533c-2dbe-479b-adaa-f5401606f074",
+      "name": "Webhook",
+      "webhookId": "521c420a-9d59-4b99-a979-531e5bcfa4bb"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "",
+          "cachedResultUrl": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -32,
+        -16
+      ],
+      "id": "096ac9e6-b042-4ee7-8493-92d73b3756bb",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "tMhdMpYstP1N8jrw",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $input.all().map(item => item.json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "aff89df3-7b1e-4472-b162-7bbcdf65e239",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "6d2958e2-633d-4f66-a159-70bdefa1d7e3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c03253201ec2493da6fa48830277e19302b58736c6b3e5f6a83c1e43d2d3616c"
+  },
+  "nodeGroups": [],
+  "id": "xTAck3sEvlXk15jM",
+  "tags": []
+}

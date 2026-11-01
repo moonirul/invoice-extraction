@@ -1,0 +1,171 @@
+{
+  "name": "backend",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2bfc99f9-d6ed-4a04-ad1d-7ff0a6d80b32",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -384,
+        -64
+      ],
+      "id": "aaa85412-d82f-47b8-a31e-efc41cd83726",
+      "name": "Webhook",
+      "webhookId": "2bfc99f9-d6ed-4a04-ad1d-7ff0a6d80b32"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please extract structured data from the following extracted invoice text and return it as a valid JSON object.\n\nFilename: {{$json.body.filename}}\n\nExtracted Invoice Text:\n----------------------------------\n{{$json.body.extracted_text}}\n----------------------------------\n\nExpected JSON Schema Structure:\n{\n  \"document_metadata\": {\n    \"file_name\": \"string\",\n    \"document_type\": \"string\"\n  },\n  \"invoice_details\": {\n    \"invoice_number\": \"string\",\n    \"invoice_date\": \"string\",\n    \"due_date\": \"string\",\n    \"po_number\": \"string\",\n    \"currency\": \"string\"\n  },\n  \"supplier\": {\n    \"name\": \"string\",\n    \"address\": \"string\",\n    \"tax_id\": \"string\"\n  },\n  \"customer\": {\n    \"name\": \"string\",\n    \"contact_person\": \"string\",\n    \"address\": \"string\"\n  },\n  \"line_items\": [\n    {\n      \"item_code\": \"string\",\n      \"description\": \"string\",\n      \"quantity\": 0,\n      \"unit_price\": 0.0,\n      \"discount\": 0.0,\n      \"total\": 0.0\n    }\n  ],\n  \"financial_summary\": {\n    \"subtotal\": 0.0,\n    \"discount\": 0.0,\n    \"net_subtotal\": 0.0,\n    \"tax_amount\": 0.0,\n    \"shipping_handling\": 0.0,\n    \"total_amount\": 0.0\n  },\n  \"validation_flags\": {\n    \"is_math_valid\": true,\n    \"missing_fields\": []\n  }\n}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an advanced AI Document Intelligence and Financial Data Extraction Agent. Your task is to accurately extract structured information from raw OCR text of business invoices, receipts, and financial documents.\n\nStrict Rules:\n1. Extract data precisely as it appears in the text without inventing or hallucinating any values.\n2. If a specific field or value is missing or unclear, set it to null or an empty array.\n3. Parse all numerical values (quantities, unit prices, discounts, taxes, totals) as numbers (float/integer) rather than strings where applicable.\n4. Return the final output strictly as a valid JSON object matching the requested schema. Do not include any extra conversational text outside the JSON block."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -160,
+        -64
+      ],
+      "id": "ff2573b4-8b6e-4d03-98f4-e72b91aa057a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultName": "",
+          "cachedResultUrl": ""
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.5,
+      "position": [
+        -304,
+        144
+      ],
+      "id": "0dcc1516-3c88-483a-ac11-f7baac318d5f",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "0OLhkhgbbIN7sGbS",
+          "name": "Anthropic account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $('Code in JavaScript').item.json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        352,
+        -64
+      ],
+      "id": "8c11bab0-76ad-4fcc-8b8e-23532875d452",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawOutput = $('AI Agent').item.json.output;\nconst cleanedString = rawOutput.replace(/```json\\n?/g, \"\").replace(/```\\n?/g, \"\").trim();\nreturn {\n  json: JSON.parse(cleanedString)\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        -64
+      ],
+      "id": "1fdd46f3-65af-4dd8-8b04-287c7c41e763",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {
+    "AI Agent": [
+      {
+        "json": {
+          "output": "```json\n{\n  \"document_metadata\": {\n    \"file_name\": \"enterprise_invoice.pdf\",\n    \"document_type\": \"Invoice\"\n  },\n  \"invoice_details\": {\n    \"invoice_number\": \"GTC-INV-2026-9842\",\n    \"invoice_date\": \"October 30, 2026\",\n    \"due_date\": \"November 30, 2026\",\n    \"po_number\": \"PO-99281-XYZ\",\n    \"currency\": \"USD\"\n  },\n  \"supplier\": {\n    \"name\": \"GLOBAL TECH CORP LTD.\",\n    \"address\": \"122/B, Gulshan Avenue, Dhaka-1212, Bangladesh\",\n    \"tax_id\": \"BIN: 000987654-0101 | VAT Reg: 458921\"\n  },\n  \"customer\": {\n    \"name\": \"Nordic Solutions AB\",\n    \"contact_person\": \"Erik Lindqvist\",\n    \"address\": \"Sveavägen 44, 111 34 Stockholm, Sweden\"\n  },\n  \"shipping_address\": {\n    \"name\": \"Helsinki Tech Hub\",\n    \"address\": \"Mannerheimintie 12, 00100 Helsinki, Finland\"\n  },\n  \"customer_tax_id\": \"SE556677889901\",\n  \"line_items\": [\n    {\n      \"item_code\": \"ITM-01\",\n      \"description\": \"Cloud Infrastructure Setup\",\n      \"quantity\": 1,\n      \"unit_price\": 2500.00,\n      \"discount\": 100.00,\n      \"total\": 2400.00\n    },\n    {\n      \"item_code\": \"ITM-02\",\n      \"description\": \"FastAPI Microservices Dev\",\n      \"quantity\": 4,\n      \"unit_price\": 600.00,\n      \"discount\": 0.00,\n      \"total\": 2400.00\n    },\n    {\n      \"item_code\": \"ITM-03\",\n      \"description\": \"n8n AI Workflow Automation\",\n      \"quantity\": 2,\n      \"unit_price\": 1250.00,\n      \"discount\": 250.00,\n      \"total\": 2250.00\n    },\n    {\n      \"item_code\": \"ITM-04\",\n      \"description\": \"Docker & Linux Deployment\",\n      \"quantity\": 1,\n      \"unit_price\": 800.00,\n      \"discount\": 0.00,\n      \"total\": 800.00\n    }\n  ],\n  \"financial_summary\": {\n    \"subtotal\": 7850.00,\n    \"global_discount_percentage\": 5.0,\n    \"discount\": 392.50,\n    \"net_subtotal\": 7457.50,\n    \"tax_rate_percentage\": 15.0,\n    \"tax_amount\": 1118.63,\n    \"shipping_handling\": 150.00,\n    \"total_amount\": 8726.13\n  },\n  \"payment_instructions\": {\n    \"bank_name\": \"Standard Chartered Bank, Dhaka Branch\",\n    \"swift_code\": \"SCBLBDDX\",\n    \"account_number\": \"01-1234567-02\",\n    \"note\": \"Please include invoice number in wire transfer description.\"\n  },\n  \"validation_flags\": {\n    \"is_math_valid\": true,\n    \"math_validation_notes\": {\n      \"line_item_checks\": {\n        \"ITM-01\": \"1 × 2500.00 − 100.00 = 2400.00 ✓\",\n        \"ITM-02\": \"4 × 600.00 − 0.00 = 2400.00 ✓\",\n        \"ITM-03\": \"2 × 1250.00 − 250.00 = 2250.00 ✓\",\n        \"ITM-04\": \"1 × 800.00 − 0.00 = 800.00 ✓\"\n      },\n      \"subtotal_check\": \"2400.00 + 2400.00 + 2250.00 + 800.00 = 7850.00 ✓\",\n      \"global_discount_check\": \"7850.00 × 5% = 392.50 ✓\",\n      \"net_subtotal_check\": \"7850.00 − 392.50 = 7457.50 ✓\",\n      \"tax_check\": \"7457.50 × 15% = 1118.625 ≈ 1118.63 ✓\",\n      \"total_check\": \"7457.50 + 1118.63 + 150.00 = 8726.13 ✓\"\n    },\n    \"missing_fields\": []\n  }\n}\n```"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d12e4a03-cec5-499a-8fa9-570e936f546f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c03253201ec2493da6fa48830277e19302b58736c6b3e5f6a83c1e43d2d3616c"
+  },
+  "nodeGroups": [],
+  "id": "xDBul23io4y0FyG5",
+  "tags": []
+}

@@ -1,0 +1,81 @@
+{
+  "name": "Save Data",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "95905278-de56-4c28-881a-5fbe2a4bbff0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        -48
+      ],
+      "id": "42543267-eb71-459a-9818-fdc4d0ee3390",
+      "name": "Webhook",
+      "webhookId": "95905278-de56-4c28-881a-5fbe2a4bbff0"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "",
+          "cachedResultUrl": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        -48
+      ],
+      "id": "91011577-26ec-41fe-a361-80d64c9aeffa",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "tMhdMpYstP1N8jrw",
+          "name": "Google Sheets account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a68b796f-2ab7-4406-8796-c034d8e65eab",
+  "meta": {
+    "instanceId": "c03253201ec2493da6fa48830277e19302b58736c6b3e5f6a83c1e43d2d3616c"
+  },
+  "nodeGroups": [],
+  "id": "TXC2BURRRkanuhkj",
+  "tags": []
+}
