@@ -261,9 +261,7 @@ Create frontend/.env:
 Variable	Default	Description
 VITE_API_BASE_URL	http://localhost:8000	Backend API base URL
 VITE_MAX_UPLOAD_MB	10	Maximum upload size
-
 Security Note: Never expose backend secrets, n8n authentication tokens, or private API credentials through frontend environment variables.
-
 🔗 n8n Workflow Integration
 
 The application uses three independent n8n workflows.
@@ -273,30 +271,37 @@ Workflow 01 — Invoice Extraction
 Purpose: Convert extracted PDF text into structured invoice information.
 
 Method: POST
+
 Input:
+
 json
 {
   "filename": "invoice.pdf",
   "extracted_text": "Invoice Number: INV-001..."
 }
 
+
 Output: Structured invoice JSON.
+
 Workflow 02 — Invoice Persistence
 
 Purpose: Save user-approved invoice records to Google Sheets.
 
 Method: POST
+
 Input: Complete validated invoice JSON.
+
 Output: Any successful 2xx HTTP response.
+
 Workflow 03 — Invoice Listing
 
 Purpose: Retrieve previously stored invoice records.
 
 Method: GET
+
 Output: JSON array containing saved invoices.
 
 Important: Activate all three n8n workflows and use production webhook URLs (/webhook/...) instead of temporary test URLs.
-
 📦 Invoice Data Schema
 
 The AI extraction workflow returns a standardized invoice object.
@@ -338,9 +343,7 @@ json
   }
 }
 
-
 The values above are illustrative examples.
-
 📡 REST API Reference
 
 Base URL:
@@ -428,7 +431,6 @@ docker compose up -d --build
 
 Access the application:
 
-text
 http://localhost:8080
 
 Architecture
@@ -456,9 +458,7 @@ Avoid logging sensitive invoice information.
 Configure appropriate proxy request and response timeouts.
 Apply rate limiting to public-facing API endpoints.
 Restrict access to Google Sheets and associated credentials.
-
 Note: Authentication and duplicate invoice detection are not currently implemented.
-
 ⚠️ Current Limitations
 Limitation	Details
 OCR	Scanned image-based PDFs are not supported
