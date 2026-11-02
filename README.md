@@ -10,15 +10,13 @@ By integrating modern frontend frameworks with AI workflow orchestration, the ap
 
 ## 📸 Demo & Screenshots
 
-| 1. Intelligent PDF Parsing & Extraction | 2. Financial Validation & Review |
+| 1. Intelligent PDF Parsing & Extraction | 2. Sample Invoice |
 | :---: | :---: |
-| ![Upload & Processing](https://via.placeholder.com/600x350.png?text=PDF+Upload+%26+Extraction+UI) | ![Review & Validate](https://via.placeholder.com/600x350.png?text=Interactive+Review+Form) |
+| ![Dashboard Overview](/Images/Dashboard.png) | ![Sample Invoice](/Images/Sample%20Invoice.png) |
 
-| 3. Saved Records Dashboard | 4. Automated Workflow Integration |
+| 3. Source Code| 4. Automated Workflow Integration |
 | :---: | :---: |
-| ![Dashboard Overview](https://via.placeholder.com/600x350.png?text=Invoice+Management+Dashboard) | ![Architecture Diagram](https://via.placeholder.com/600x350.png?text=n8n+AI+Workflow) |
-
----
+| ![Source Code](/Images/Source%20Code.png) | ![Architecture Diagram](/Images/PDF%20Exact%20Workflow%20n8n.png) |
 
 ## ✨ Key Features
 
